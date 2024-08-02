@@ -80,15 +80,13 @@ Bootstrap 5 HTML CSS Template
         </nav>
 
         <main>
-
             <section class="hero-section hero-slide d-flex justify-content-center align-items-center" id="section_1">
                 <div class="container">
                     <div class="row">
-
                         <div class="col-lg-8 col-12 text-center mx-auto">
                             <div class="hero-section-text">
                                 <small class="section-small-title">Welcome to Inkling Lab <i class="hero-icon bi-house"></i></small>
-
+        
                                 <h1 class="hero-title text-white mt-2 mb-4">Design, Sew & Build</h1>
                                 <h2 class="hero-title text-white mt-2 mb-4">Transform your creative ideas into reality with one-on-one coaching in home improvement and sewing.</h2>
                                 
@@ -96,16 +94,24 @@ Bootstrap 5 HTML CSS Template
                                     <div class="row">
                                         <div class="col-lg-5 col-md-6 col-12">
                                             <div class="input-group align-items-center">
-                                                <label for="product-name">Product</label>
-
-                                                <input type="text" name="product-name" id="product-name" class="form-control" placeholder="Clothing Repair, Construct..." required>
+                                                <label for="looking-for">Product</label>
+        
+                                                <select name="looking-for" class="form-select form-control" id="looking-for" aria-label="Default select example">
+                                                    <option value="0" selected>What can I help you with?</option>
+                                                    <option value="1" data-target="https://www.inkling.se/shop-detail.html#section_1">Clothing repairs</option>
+                                                    <option value="2" data-target="https://www.inkling.se/shop-detail.html#section_2">Construct Furniture</option>
+                                                    <option value="3" data-target="https://www.inkling.se/shop-detail.html#section_3">Curtain Hemming</option>
+                                                    <option value="4" data-target="https://www.inkling.se/shop-detail.html#section_4">Made-to-Order Curtains</option>
+                                                    <option value="5" data-target="https://www.inkling.se/shop-detail.html#section_5">Custom Building Projects</option>
+                                                    <option value="6" data-target="https://www.inkling.se/shop-detail.html#section_6">Online Sewing Course</option>
+                                                </select>
                                             </div>
                                         </div>
-
+        
                                         <div class="col-lg-5 col-md-6 col-12">
                                             <div class="input-group align-items-center">
-                                                <label for="last-name">Price</label>
-
+                                                <label for="price-range">Price</label>
+        
                                                 <select name="price-range" class="form-select form-control" id="price-range" aria-label="Default select example">
                                                     <option value="500" selected>250 to 1 000 kr</option>
                                                     <option value="1000">1 000 - 5 000 kr</option>
@@ -113,22 +119,33 @@ Bootstrap 5 HTML CSS Template
                                                 </select>
                                             </div>
                                         </div>
-
+        
                                         <div class="col-lg-2 col-md-6 col-12">
                                             <button type="submit" class="form-control">Search</button>
                                         </div>
                                     </div>
                                 </form>
-
-                                <div class="hero-btn d-flex justify-content-center align-items-center">
-                                    <a class="bi-arrow-down hero-btn-link smoothscroll" href="#section_2"></a>
-                                </div> 
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>
+        
+
+<script>
+    document.getElementById('product-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var productSelect = document.getElementById('looking-for');
+        var selectedOption = productSelect.options[productSelect.selectedIndex];
+        var targetUrl = selectedOption.getAttribute('data-target');
+    
+        if (targetUrl) {
+            window.location.href = targetUrl;
+        } else {
+            alert('Please select a product to search for.');
+        }
+    });
+    </script>
 
             <section class="about-section section-padding" id="section_2">
                 <div class="container">
