@@ -90,7 +90,7 @@ Bootstrap 5 HTML CSS Template
                                 <h1 class="hero-title text-white mt-2 mb-4">Design, Sew & Build</h1>
                                 <h2 class="hero-title text-white mt-2 mb-4">Transform your creative ideas into reality with one-on-one coaching in home improvement and sewing.</h2>
                                 
-                                <form class="custom-form hero-form" action="#" method="get" role="form">
+                                <form class="custom-form hero-form" id="product-form" action="javascript:void(0);" role="form">
                                     <div class="row">
                                         <div class="col-lg-5 col-md-6 col-12">
                                             <div class="input-group align-items-center">
@@ -132,20 +132,20 @@ Bootstrap 5 HTML CSS Template
             </section>
         
 
-<script>
-    document.getElementById('product-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var productSelect = document.getElementById('looking-for');
-        var selectedOption = productSelect.options[productSelect.selectedIndex];
-        var targetUrl = selectedOption.getAttribute('data-target');
-    
-        if (targetUrl) {
-            window.location.href = targetUrl;
-        } else {
-            alert('Please select a product to search for.');
-        }
-    });
-    </script>
+            <script>
+                document.getElementById('product-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    var productSelect = document.getElementById('looking-for');
+                    var selectedOption = productSelect.options[productSelect.selectedIndex];
+                    var targetUrl = selectedOption.getAttribute('data-target');
+                
+                    if (targetUrl && selectedOption.value !== "0") {
+                        window.location.href = targetUrl;
+                    } else {
+                        alert('Please select a product to search for.');
+                    }
+                });
+                </script>
 
             <section class="about-section section-padding" id="section_2">
                 <div class="container">
