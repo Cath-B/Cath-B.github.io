@@ -4,185 +4,158 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portfolio | Catherine Brockman</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Helvetica Neue", Arial, sans-serif;
-      line-height: 1.6;
-      color: #222;
-    }
-
-    /* Shared left block */
-    .hero-left, .section-left {
-      flex: 0 0 50%;
-      width: 50%;
-      background: #0f6ba5;
-      display: flex;
-      justify-content: flex-end;
-      text-align: right;
-      color: #fff;
-      padding-right: 2.5rem;
-    }
-
-    /* Hero stays vertically centred */
-    .hero-left {
-      align-items: center;
-    }
-
-    /* Section titles align to top */
-    .section-left {
-      align-items: flex-start;
-      padding-top: 3rem; /* match .section-right padding */
-    }
-
-    .section-left h2 {
-      font-size: 2rem;
-      margin: 0;
-    }
-
-    /* Hero */
-    .hero {
-      display: flex;
-      min-height: 70vh;
-    }
-    .hero-right {
-      flex: 0 0 50%;
-      width: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff;
-    }
-    .hero-right img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-    .hero-left h1 {
-      font-size: 4rem; /* Much bigger title */
-      margin: 0 0 1rem 0;
-    }
-    .hero-left p {
-      margin: 0;
-      font-size: 1.2rem;
-    }
-
-    /* Section container */
-    .section {
-      display: flex;
-      min-height: 60vh;
-    }
-
-  .section-right {
-  flex: 0 0 50%;
-  width: 50%;
-  background: #fff;
-  padding: 3rem 2rem;   /* equal padding on both sides */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  box-sizing: border-box; /* ensures padding is inside the width */
-}
-/* Mobile adjustments for right-hand text */
-@media (max-width: 900px) {
-  .section-right {
-    width: 100%;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    text-align: center;
-    box-sizing: border-box; /* ensure padding stays inside width */
+<style>
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: #222;
   }
 
-  .hero-right {
-    width: 100%;
-    padding-left: 2rem;
-    padding-right: 2rem;
+  /* Shared left block */
+  .hero-left, .section-left {
+    flex: 0 0 50%;
+    width: 50%;
+    background: #0f6ba5;
+    display: flex;
+    justify-content: flex-end;
+    text-align: right;
+    color: #fff;
+    padding-right: 2.5rem;
     box-sizing: border-box;
   }
 
-  .left {
-    width: 100%;
-    justify-content: center;
-    text-align: center;
-    padding: 1.5rem 2rem; /* keep some spacing */
+  /* Hero vertical centering */
+  .hero-left {
+    align-items: center;
   }
-}
 
+  /* Section titles align to top */
+  .section-left {
+    align-items: flex-start;
+    padding-top: 3rem; /* match .section-right padding */
+  }
 
-    /* Portfolio items */
-  /* Thumbnail sizing — put this in your <style> (replace existing .portfolio-item img) */
-.portfolio-item img,
-.portfolio-thumbs img {
-  display: block;
-  max-width: 280px;   /* desktop thumbnail size — visually pleasing */
-  width: auto;        /* keep aspect ratio, won't stretch to container */
-  height: auto;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
+  .section-left h2 {
+    font-size: 2rem;
+    margin: 0;
+  }
 
-/* Make thumbnails fluid / full-width on small screens */
-@media (max-width: 900px) {
+  /* Hero */
+  .hero {
+    display: flex;
+    min-height: 70vh;
+  }
+  .hero-right {
+    flex: 0 0 50%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+  }
+  .hero-right img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  .hero-left h1 {
+    font-size: 4rem; /* Much bigger title */
+    margin: 0 0 1rem 0;
+  }
+  .hero-left p {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  /* Section container */
+  .section {
+    display: flex;
+    min-height: 60vh;
+  }
+
+  .section-right {
+    flex: 0 0 50%;
+    width: 50%;
+    background: #fff;
+    padding: 3rem 2rem;   /* equal padding left & right */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+
+  /* Portfolio thumbnails */
   .portfolio-item img,
   .portfolio-thumbs img {
-    width: 100%;
-    max-width: 100%;
+    display: block;
+    max-width: 280px;   /* desktop thumbnail size */
+    width: auto;
+    height: auto;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
   }
-}
 
+  /* Lightbox */
+  .lightbox {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    justify-content: center;
+    align-items: center;
+  }
+  .lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+  }
+  .lightbox:target {
+    display: flex;
+  }
 
-    /* Lightbox */
-    .lightbox {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
+  /* Unified mobile adjustments */
+  @media (max-width: 900px) {
+    /* Stack sections and hero vertically */
+    .hero, .section {
+      flex-direction: column;
+    }
+
+    /* Left and right blocks full-width and centered */
+    .hero-left, .hero-right, .section-left, .section-right {
+      width: 100%;
+      flex: unset;
+      text-align: center;
       justify-content: center;
+      padding: 2rem;
+      box-sizing: border-box;
+    }
+
+    /* Section-left titles padding */
+    .section-left {
+      padding-top: 2rem;
+    }
+
+    /* Hero-left padding */
+    .hero-left {
+      padding-right: 2rem;
+    }
+
+    /* Portfolio thumbnails centered and responsive */
+    .portfolio-thumbs {
       align-items: center;
     }
-    .lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 8px;
+    .portfolio-item img,
+    .portfolio-thumbs img {
+      width: 100%;
+      max-width: 280px;
     }
-    .lightbox:target {
-      display: flex;
-    }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .hero, .section {
-        flex-direction: column;
-      }
-      .hero-left, .hero-right, .section-left, .section-right {
-        flex: unset;
-        width: 100%;
-        justify-content: center;
-        text-align: center;
-        padding: 2rem;
-      }
-      .hero-left {
-        padding-right: 2rem;
-      }
-      .section-left {
-        padding-top: 2rem;
-      }
-    }
-    /* Mobile adjustments for portfolio thumbnails */
-@media (max-width: 900px) {
-  .portfolio-thumbs {
-    align-items: center;   /* centres the thumbnails horizontally */
   }
-  .portfolio-item img {
-    width: 100%;           /* scale thumbnails to container width */
-    max-width: 280px;      /* but not bigger than desktop thumbnail size */
-  }
-}
+</style>
 
-  </style>
 </head>
 <body>
 
