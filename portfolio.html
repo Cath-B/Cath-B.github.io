@@ -1,220 +1,225 @@
-<!DOCTYPE HTML>
-<!--
-	Photon by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>Inkling | Communications Consultant</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-		<style>
-		.box {
-			width: 100%;
-			height: 200px;
-			border: none;
-			}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio | Catherine Brockman</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #222;
+    }
 
-		  img {
-			width: 100%; /* takes the 100 % width of its container (.box div)*/
-			height: 100%; /* takes the 100 % height of its container (.box div)*/
-			object-fit: contain;
-			object-position:center;
-		  }
-		</style>
-	<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PHS73BYGMB"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    /* Shared left block */
+    .hero-left, .section-left {
+      flex: 0 0 50%;
+      width: 50%;
+      background: #0f6ba5;
+      display: flex;
+      justify-content: flex-end;
+      text-align: right;
+      color: #fff;
+      padding-right: 2.5rem;
+    }
 
-  gtag('config', 'G-PHS73BYGMB');
-</script>
-	</head>
-	<body class="is-preload">
+    /* Hero stays vertically centred */
+    .hero-left {
+      align-items: center;
+    }
 
-		<!-- Header -->
-			<section id="header">
-				<div class="inner">
-					<div class="box"
-						span class="img"><img src="images/samples/Inkling logo large white.png" alt="" class="center">
-					</div>
-					<p><h1><strong>Inkling</strong></h1></p>
-				<p></p>
-					<h2>Hi, I'm <strong>Catherine Brockman</strong>,<br />
-					a communications expert.</h2>
-					<p>Have a browse through my portfolio of<br />
-					strategy, copy and project management.</p>
-					<ul class="actions special">
-						<li><a href="#one" class="button scrolly">Discover</a></li>
-					</ul>
-				</div>
-			</section>
+    /* Section titles align to top */
+    .section-left {
+      align-items: flex-start;
+      padding-top: 3rem; /* match .section-right padding */
+    }
 
-		<!-- One -->
-<section id="services" class="main style1">
-	<div class="container">
-	  <div class="row gtr-150">
-		<div class="col-12 col-12-medium">
-		  <header class="major">
-			<h2>Services: Empowering Your Team with AI</h2>
-		  </header>
-		  <div style="display: flex; flex-wrap: wrap;">
-			<div style="flex: 1;">
-			  <div class="service">
-				<h3>AI Workshops: Harness the Power of AI</h3>
-				<p>Discover how AI can revolutionize your work. Join our workshops to learn how to harness off-the-shelf AI tools for your everyday tasks. Enhance your productivity, creativity, and communication skills with the power of AI. Whether you're a beginner or an experienced professional, these workshops are designed to give you practical skills and insights that you can apply immediately to your work.</p>
-			  </div>
-			  <div class="service">
-				<h3>Communications Coaching: Fine-Tune Your Strategy</h3>
-				<p>Does your communication need fine-tuning or a complete refresh? I can coach your team to run your own communications strategy using the most efficient tools available. If you are struggling to engage with your clients or targets, I can guide you through more high-impact mediums such as video content or segment-tailored messages. Working with your business' strengths, I show you how to maximize your engagement without reinventing the wheel.</p>
-			  </div>
-			  <div class="service">
-				<h3>Project Management: Deliver Impactful Campaigns</h3>
-				<p>We start by evaluating your current strategy and what your business goals are. Then I create impactful campaigns for websites, emails, videos, and social media. With a focus on automation, content management, and resource management, I design and implement projects that drive growth and captivate audiences.</p>
-			  </div>
-			</div>
-			<div style="flex: 1; margin-left: 20px;">
-			  <span class="image fit"><img src="images/profile green.png" alt="Catherine Brockman profile picture" style="border: 15px solid #3e51a2;"></span>
-			</div>
-		  </div>
-		</div>
-	  </div>
-	</div>
+    .section-left h2 {
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    /* Hero */
+    .hero {
+      display: flex;
+      min-height: 70vh;
+    }
+    .hero-right {
+      flex: 0 0 50%;
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+    }
+    .hero-right img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .hero-left h1 {
+      font-size: 4rem; /* Much bigger title */
+      margin: 0 0 1rem 0;
+    }
+    .hero-left p {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    /* Section container */
+    .section {
+      display: flex;
+      min-height: 60vh;
+    }
+
+    .section-right {
+      flex: 0 0 50%;
+      width: 50%;
+      background: #fff;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    /* Portfolio items */
+    .portfolio-item {
+      margin-bottom: 2rem;
+    }
+    .portfolio-item img {
+      max-width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .portfolio-item img:hover {
+      transform: scale(1.02);
+    }
+    .portfolio-item h3 {
+      margin: 0.5rem 0;
+      color: #2b9c7c;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      justify-content: center;
+      align-items: center;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+    }
+    .lightbox:target {
+      display: flex;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero, .section {
+        flex-direction: column;
+      }
+      .hero-left, .hero-right, .section-left, .section-right {
+        flex: unset;
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+      }
+      .hero-left {
+        padding-right: 2rem;
+      }
+      .section-left {
+        padding-top: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-left">
+      <div>
+        <h1>Inkling Portfolio</h1>
+			<h1>Catherine Brockman</h1>
+		
+        <p>Communications Strategy, Copy, and Project Management</p>
+      </div>
+    </div>
+    <div class="hero-right">
+      <img src="images/samples/hero.jpg" alt="Hero image">
+    </div>
+  </header>
+
+  <!-- Services -->
+  <section class="section" id="services">
+    <div class="section-left">
+      <h2>Services</h2>
+    </div>
+    <div class="section-right">
+      <p><strong>AI Workshops:</strong> Discover how AI can revolutionise your work. Enhance your productivity, creativity, and communication skills with the power of AI.</p>
+      <p><strong>Communications Coaching:</strong> Fine-tune your strategy. I can coach your team to run your own communications strategy using the most efficient tools available.</p>
+      <p><strong>Project Management:</strong> I create impactful campaigns for websites, emails, videos, and social media, focusing on automation and growth.</p>
+    </div>
   </section>
 
+  <!-- Portfolio -->
+  <section class="section" id="portfolio">
+    <div class="section-left">
+      <h2>Portfolio</h2>
+    </div>
+    <div class="section-right">
+      <div class="portfolio-item">
+        <h3>LinkedIn post, AI Sweden</h3>
+        <p>Part of a multi-pronged approach to increase partner engagement.</p>
+        <a href="#img1"><img src="images/samples/sample1.jpg" alt="AI Sweden"></a>
+      </div>
+      <div class="portfolio-item">
+        <h3>Community content writing</h3>
+        <p>Targeting audiences with the most relevant offerings and opportunities.</p>
+        <a href="#img2"><img src="images/samples/sample2.jpg" alt="Community content"></a>
+      </div>
+      <div class="portfolio-item">
+        <h3>Voiceover on explainer video</h3>
+        <p>Writing and recording high-quality audio for this in-a-nutshell explanation.</p>
+        <a href="#img3"><img src="images/samples/sample3.jpg" alt="Voiceover"></a>
+      </div>
+    </div>
+  </section>
 
-		<!-- Two -->
-			<section id="two" class="main style2">
-				<div class="container">
-					<div class="row gtr-150">
-						<div class="col-6 col-12-medium">
-							<ul class="major-icons">
-								<li><span class="icon solid style1 major fa-code"></span></li>
-								<li><span class="icon solid style2 major fa-bolt"></span></li>
-								<li><span class="icon solid style3 major fa-camera-retro"></span></li>
-								<li><span class="icon solid style4 major fa-cog"></span></li>
-								<li><span class="icon solid style5 major fa-desktop"></span></li>
-								<li><span class="icon solid style6 major fa-calendar"></span></li>
-							</ul>
-						</div>
-						<div class="col-6 col-12-medium">
-							<header class="major">
-								<h2>Engage and inform audiences<br />
-								with your authentic story</h2>
-							</header>
-							<p>I love working with my clients to create marketing solutions that work for their business. I can design and implement projects in areas such as automation, content management, resource management & communication.</p>
-							<p>Does your communication need fine tuning or a complete refresh? I can coach your team to run your own communications strategy using the most efficient tools available. If you are struggling to engage with your clients or targets, I can guide you through more high-impact medium such as video content or segment-tailored messages. Working with your business' strengths I show you how to maximise your engagement without reinventing the wheel.</p>
-							<p>We start by evaluating your current strategy and what your business goals are. Then I create impactful campaigns for websites, emails, videos, and social media.</p>
-						</div>
-					</div>
-				</div>
-			</section>
+  <!-- Contact -->
+  <section class="section" id="contact">
+    <div class="section-left">
+      <h2>Contact</h2>
+    </div>
+    <div class="section-right">
+      <p>Need some fresh solutions? I consult through my company, Inkling, on tasks big and small.</p>
+      <p>
+        <a href="mailto:youremail@example.com">Email</a> | 
+        <a href="https://linkedin.com/in/yourprofile">LinkedIn</a> | 
+        <a href="https://github.com/yourgithub">GitHub</a>
+      </p>
+    </div>
+  </section>
 
-		<!-- Three -->
-			<section id="three" class="main style1 special">
-				<div class="container">
-					<header class="major">
-						<h2>Portfolio</h2>
-					</header>
-					<p>A sampling of my text, design and audiovisual work.</p>
-					<div class="row gtr-150">
-						<div class="col-4 col-12-medium">
-							<span class="image fit"><img src="images/samples/AI Sweden Linkedin Post sample.png" alt="" /></span>
-							<h3>LinkedIn post, AI Sweden</h3>
-							<p>Part of a multi-pronged approach to increase partner engagement.</p>
-							<ul class="actions special">
-								<li><a href="https://www.linkedin.com/feed/update/urn:li:activity:7003722276747513856?updateEntityUrn=urn%3Ali%3Afs_feedUpdate%3A%28V2%2Curn%3Ali%3Aactivity%3A7003722276747513856%29" target="_blank" class="button">More</a></li>
-							</ul>
-						</div>
-						<div class="col-4 col-12-medium">
-							<span class="image fit"><img src="images/samples/AI Sweden News sample.png" alt="" /></span>
-							<h3>Community content writing</h3>
-							<p>Targeting audiences with the most relevant offerings and opportunities.</p>
-							<ul class="actions special">
-								<li><a href="https://www.ai.se/en/ai-news" target="_blank" class="button">More</a></li>
-							</ul>
-						</div>
-						<div class="col-4 col-12-medium">
-							<span class="image fit"><img src="images/samples/EdgeLearningLab thumbnail.png" alt="" /></span>
-							<h3>Voiceover on explainer video</h3>
-							<p>Writing and recording high-quality audio for this in-a-nutshell explanation.</p>
-							<ul class="actions special">
-								<li><a href="https://www.youtube.com/watch?v=5BsB3-QlRaw" target="_blank" class="button">More</a></li>
-							</ul>
-						</div>
-						<div class="col-4 col-12-medium">
-							<span class="image fit"><img src="images/samples/Freespee Slides sample.png" alt="" /></span>
-							<h3>Strategy and copy, <br>
-								Freespee</h3>
-							<p>Internal communications were a key part of this new strategy.</p>
-							<ul class="actions special">
-								<li><a href="https://www.freespee.com/" target="_blank" class="button">More</a></li>
-							</ul>
-						</div>
-						<div class="col-4 col-12-medium">
-							<span class="image fit"><img src="images/samples/Unmute_02 sample.png" alt="" /></span>
-							<h3>Video production and copy, <br>
-								Freespee</h3>
-							<p>Video was a new area for this client and we experimented with free downloadable assets to accompany each episode.</p>
-							<ul class="actions special">
-								<li><a href="https://en.freespee.com/watch-unmute-automation-01/" target="_blank" class="button">More</a></li>
-							</ul>
-						</div>
-						<div class="col-4 col-12-medium">
-							<span class="image fit"><img src="images/samples/How the Pod sample.png" alt="" /></span>
-							<h3>Social media campaign, <br>
-								How the Pod</h3>
-							<p>Building hype for each episode with the most memorable content.</p>
-							<ul class="actions special">
-								<li><a href="https://shows.acast.com/how-the-pod" target="_blank" class="button">More</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</section>
+  <!-- Lightbox images -->
+  <div id="img1" class="lightbox">
+    <a href="#"><img src="images/samples/sample1.jpg" alt=""></a>
+  </div>
+  <div id="img2" class="lightbox">
+    <a href="#"><img src="images/samples/sample2.jpg" alt=""></a>
+  </div>
+  <div id="img3" class="lightbox">
+    <a href="#"><img src="images/samples/sample3.jpg" alt=""></a>
+  </div>
 
-		<!-- Four -->
-			<section id="four" class="main style2 special">
-				<div class="container">
-					<header class="major">
-						<h2>Need some fresh solutions?</h2>
-					</header>
-					<p>I consult through my company, Inkling, on tasks big and small.</p>
-					<ul class="actions special">
-						<li><a href="mailto:catherine@inkling.se" class="button wide primary">Reach Me</a></li>
-						<li><a href="./references/" class="button wide">Read References</a></li>
-					</ul>
-				</div>
-			</section>
-
-
-
-		<!-- Footer -->
-			<section id="footer">
-				<ul class="icons">
-					<li><a href="https://www.linkedin.com/in/cathbrockman/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
-					<li><a href="https://open.spotify.com/show/5SZHPHCwknxCgVi2OKBRW4?si=slRIATyVR82iUpm8MnYeqg" class="icon brands alt fa-spotify"><span class="label">Facebook</span></a></li>
-					<!--  <li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li> -->
-					<li><a href="https://github.com/Cath-B/Cath-B.github.io" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-					<li><a href="mailto:catherine@inkling.se" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>
-				</ul>
-				<ul class="copyright">
-					<li>&copy; Inkling Lab AB</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
-				</ul>
-			</section>
-
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-
-	</body>
+</body>
 </html>
