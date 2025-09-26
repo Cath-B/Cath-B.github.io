@@ -3,159 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inkling Portfolio</title>
+  <title>Portfolio | Catherine Brockman</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #222;
     }
+
+    /* Shared left block */
+    .hero-left, .section-left {
+      flex: 0 0 50%;
+      width: 50%;
+      background: #0f6ba5;
+      display: flex;
+      justify-content: flex-end;
+      text-align: right;
+      color: #fff;
+      padding-right: 2.5rem;
+    }
+
+    /* Hero stays vertically centred */
+    .hero-left {
+      align-items: center;
+    }
+
+    /* Section titles align to top */
+    .section-left {
+      align-items: flex-start;
+      padding-top: 3rem; /* match .section-right padding */
+    }
+
+    .section-left h2 {
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    /* Hero */
+    .hero {
+      display: flex;
+      min-height: 70vh;
+    }
+    .hero-right {
+      flex: 0 0 50%;
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+    }
+    .hero-right img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .hero-left h1 {
+      font-size: 4rem; /* Much bigger title */
+      margin: 0 0 1rem 0;
+    }
+    .hero-left p {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    /* Section container */
     .section {
       display: flex;
-      min-height: 100vh;
+      min-height: 60vh;
     }
-    .left {
+
+    .section-right {
+      flex: 0 0 50%;
       width: 50%;
-      background: #004080; /* consistent blue */
-      color: white;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-end;
-      padding: 2rem;
-      box-sizing: border-box;
-    }
-    .left h1, .left h2 {
-      margin: 0;
-      text-align: right;
-    }
-    .right {
-      width: 50%;
-      padding: 4rem 2rem;
-      background: white;
+      background: #fff;
+      padding: 3rem 2rem;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
     }
-    /* Hero section */
-    .hero {
-      display: flex;
-      min-height: 80vh;
-    }
-    .hero-left {
-      width: 50%;
-      background: #004080;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 2rem;
-      box-sizing: border-box;
-      text-align: right;
-    }
-    .hero-left h1 {
-      font-size: 3.5rem;
-      margin: 0;
-    }
-    .hero-left p {
-      font-size: 1.2rem;
-      margin-top: 1rem;
-    }
-    .hero-right {
-      width: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .hero-right img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    /* Portfolio thumbnails */
-    .portfolio-thumbs {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-    .portfolio-thumbs figure {
-      margin: 0;
-      text-align: center;
-    }
-    .portfolio-thumbs img {
-      max-width: 280px;
-      height: auto;
-      cursor: pointer;
-      border: 3px solid #008000; /* green accent */
-      border-radius: 6px;
-      transition: transform 0.2s ease;
-    }
-    .portfolio-thumbs img:hover {
-      transform: scale(1.05);
-    }
-    .portfolio-thumbs figcaption {
-      margin-top: 0.5rem;
-      font-size: 0.95rem;
-      color: #333;
-    }
+
+    /* Portfolio items */
+  /* Thumbnail sizing — put this in your <style> (replace existing .portfolio-item img) */
+.portfolio-item img,
+.portfolio-thumbs img {
+  display: block;
+  max-width: 280px;   /* desktop thumbnail size — visually pleasing */
+  width: auto;        /* keep aspect ratio, won't stretch to container */
+  height: auto;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+/* Make thumbnails fluid / full-width on small screens */
+@media (max-width: 900px) {
+  .portfolio-item img,
+  .portfolio-thumbs img {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+
     /* Lightbox */
     .lightbox {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.9);
       display: none;
-      align-items: center;
+      position: fixed;
+      z-index: 9999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
       justify-content: center;
-      z-index: 1000;
-      text-align: center;
-      color: white;
-      padding: 1rem;
+      align-items: center;
     }
     .lightbox img {
       max-width: 90%;
-      max-height: 80%;
-      display: block;
-      margin: 0 auto;
-    }
-    .lightbox a {
-      color: white;
-      text-decoration: none;
-      display: block;
-      margin-top: 1rem;
+      max-height: 90%;
+      border-radius: 8px;
     }
     .lightbox:target {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
     }
+
     /* Responsive */
-    @media (max-width: 768px) {
-      .section, .hero {
+    @media (max-width: 900px) {
+      .hero, .section {
         flex-direction: column;
       }
-      .left, .right, .hero-left, .hero-right {
+      .hero-left, .hero-right, .section-left, .section-right {
+        flex: unset;
         width: 100%;
-        text-align: center;
-        align-items: center;
         justify-content: center;
-      }
-      .left h1, .left h2, .hero-left h1 {
         text-align: center;
+        padding: 2rem;
       }
-      .portfolio-thumbs {
-        align-items: center;
+      .hero-left {
+        padding-right: 2rem;
+      }
+      .section-left {
+        padding-top: 2rem;
       }
     }
   </style>
 </head>
 <body>
+
   <!-- Hero -->
   <header class="hero">
     <div class="hero-left">
       <div>
         <h1>Inkling Portfolio</h1>
-        <h1>Catherine Brockman</h1>
+			<h1>Catherine Brockman</h1>
+		
         <p>Communications Strategy, Copy, and Project Management</p>
       </div>
     </div>
@@ -165,60 +165,66 @@
   </header>
 
   <!-- Services -->
-  <div class="section">
-    <div class="left">
+  <section class="section" id="services">
+    <div class="section-left">
       <h2>Services</h2>
     </div>
-    <div class="right">
-      <p>I provide communications strategy, content creation, and project management services. With experience across industries, I bring clarity and creativity to every project.</p>
+    <div class="section-right">
+      <p><strong>AI Workshops:</strong> Discover how AI can revolutionise your work. Enhance your productivity, creativity, and communication skills with the power of AI.</p>
+      <p><strong>Communications Coaching:</strong> Fine-tune your strategy. I can coach your team to run your own communications strategy using the most efficient tools available.</p>
+      <p><strong>Project Management:</strong> I create impactful campaigns for websites, emails, videos, and social media, focusing on automation and growth.</p>
     </div>
-  </div>
+  </section>
 
   <!-- Portfolio -->
-  <div class="section">
-    <div class="left">
+  <section class="section" id="portfolio">
+    <div class="section-left">
       <h2>Portfolio</h2>
     </div>
-    <div class="right">
-      <div class="portfolio-thumbs">
-        <figure>
-          <a href="#img1"><img src="images/samples/AI Sweden Linkedin Post sample.png" alt="AI Sweden Linkedin Post sample"></a>
-          <figcaption>AI Sweden Linkedin Post sample</figcaption>
-        </figure>
-        <figure>
-          <a href="#img2"><img src="images/samples/AI Sweden News sample.png" alt="AI Sweden News sample"></a>
-          <figcaption>AI Sweden News sample</figcaption>
-        </figure>
-        <figure>
-          <a href="#img3"><img src="images/samples/EdgeLearningLab thumbnail.png" alt="Edge Learning Lab video"></a>
-          <figcaption>Edge Learning Lab video</figcaption>
-        </figure>
+    <div class="section-right">
+      <div class="portfolio-item">
+        <h3>LinkedIn post, AI Sweden</h3>
+        <p>Part of a multi-pronged approach to increase partner engagement.</p>
+        <a href="#img1"><img src="images/samples/AI Sweden Linkedin Post sample.png" alt="AI Sweden"></a>
+      </div>
+      <div class="portfolio-item">
+        <h3>Community content writing</h3>
+        <p>Targeting audiences with the most relevant offerings and opportunities.</p>
+        <a href="#img2"><img src="images/samples/AI Sweden News sample.png" alt="Community content"></a>
+      </div>
+      <div class="portfolio-item">
+        <h3>Voiceover on explainer video</h3>
+        <p>Writing and recording high-quality audio for this in-a-nutshell explanation.</p>
+        <a href="#img3"><img src="images/samples/EdgeLearningLab thumbnail.png" alt="Voiceover"></a>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Contact -->
-  <div class="section">
-    <div class="left">
+  <section class="section" id="contact">
+    <div class="section-left">
       <h2>Contact</h2>
     </div>
-    <div class="right">
-      <p>If you’d like to work together, please reach out via <a href="mailto:your@email.com">email</a>.</p>
+    <div class="section-right">
+      <p>Need some fresh solutions? I consult through my company, Inkling, on tasks big and small.</p>
+      <p>
+        <a href="mailto:catherinebrockman.mejl@gmail.com">Email</a> | 
+        <a href="https://linkedin.com/in/cathbrockman/">LinkedIn</a> | 
+        <a href="https://github.com/Cath-B">GitHub</a>
+      </p>
     </div>
-  </div>
+  </section>
 
-  <!-- Lightbox popups -->
+  <!-- Lightbox images -->
   <div id="img1" class="lightbox">
-    <img src="images/samples/AI Sweden Linkedin Post sample.png" alt="AI Sweden Linkedin Post sample">
-    <a href="#">AI Sweden Linkedin Post sample</a>
+    <a href="#"><img src="images/samples/AI Sweden Linkedin Post sample.png" alt="">AI Sweden Linkedin Post sample</a>
   </div>
   <div id="img2" class="lightbox">
-    <img src="images/samples/AI Sweden News sample.png" alt="AI Sweden News sample">
-    <a href="#">AI Sweden News sample</a>
+    <a href="#"><img src="images/samples/AI Sweden News sample.png" alt="">AI Sweden News sample</a>
   </div>
   <div id="img3" class="lightbox">
-    <img src="images/samples/EdgeLearningLab thumbnail.png" alt="Edge Learning Lab video">
-    <a href="#">Edge Learning Lab video</a>
+    <a href="#"><img src="images/samples/EdgeLearningLab thumbnail.png" alt="">Edge Learning Lab video</a>
   </div>
+
 </body>
 </html>
