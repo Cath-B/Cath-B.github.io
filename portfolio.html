@@ -73,15 +73,17 @@
       min-height: 60vh;
     }
 
-    .section-right {
-      flex: 0 0 50%;
-      width: 50%;
-      background: #fff;
-      padding: 3rem 2rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
+  .section-right {
+  flex: 0 0 50%;
+  width: 50%;
+  background: #fff;
+  padding: 3rem 2rem;   /* equal padding on both sides */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box; /* ensures padding is inside the width */
+}
+
 
     /* Portfolio items */
   /* Thumbnail sizing — put this in your <style> (replace existing .portfolio-item img) */
