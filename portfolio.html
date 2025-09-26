@@ -83,6 +83,30 @@
   justify-content: flex-start;
   box-sizing: border-box; /* ensures padding is inside the width */
 }
+/* Mobile adjustments for right-hand text */
+@media (max-width: 900px) {
+  .section-right {
+    width: 100%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    text-align: center;
+    box-sizing: border-box; /* ensure padding stays inside width */
+  }
+
+  .hero-right {
+    width: 100%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    box-sizing: border-box;
+  }
+
+  .left {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding: 1.5rem 2rem; /* keep some spacing */
+  }
+}
 
 
     /* Portfolio items */
@@ -147,6 +171,17 @@
         padding-top: 2rem;
       }
     }
+    /* Mobile adjustments for portfolio thumbnails */
+@media (max-width: 900px) {
+  .portfolio-thumbs {
+    align-items: center;   /* centres the thumbnails horizontally */
+  }
+  .portfolio-item img {
+    width: 100%;           /* scale thumbnails to container width */
+    max-width: 280px;      /* but not bigger than desktop thumbnail size */
+  }
+}
+
   </style>
 </head>
 <body>
