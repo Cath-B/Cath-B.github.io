@@ -1,0 +1,185 @@
+---
+import SashikoBand from './SashikoBand.astro';
+import { type Lang, type PageKey, routes, ui, otherLang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  current?: PageKey;
+  alternate: string;
+  home?: boolean;
+}
+const { lang, current, alternate, home = false } = Astro.props;
+const t = ui[lang];
+const navKeys = ['workshops', 'lessons', 'shop', 'blog'] as const;
+const other = otherLang(lang);
+---
+
+<header class:list={['site-header', { home }]}>
+  <a class="skip" href="#main">{t.skip}</a>
+  <div class="band-wrap">
+    <SashikoBand id="top" height={home ? 'clamp(9rem, 34vh, 20rem)' : '2.75rem'} animate={home} />
+    <a class="lang" href={alternate} hreflang={other} lang={other}>{t.switchTo}</a>
+  </div>
+
+  <div class="bar wrap">
+    <a class="lockup" href={routes.home[lang]} aria-label={home ? undefined : 'Catherine Brockman, Inkling Lab'}>
+      {home ? <h1 class="name">Catherine Brockman</h1> : <span class="name">Catherine Brockman</span>}
+      <span class="studio">Inkling Lab</span>
+    </a>
+    <nav aria-label={t.navLabel}>
+      <ul>
+        {navKeys.map((key) => (
+          <li>
+            <a href={routes[key][lang]} aria-current={current === key ? 'page' : undefined}>
+              {t.nav[key]}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .band-wrap {
+    position: relative;
+  }
+  .lang {
+    position: absolute;
+    top: 50%;
+    right: var(--gutter);
+    transform: translateY(-50%);
+    font-family: var(--sans);
+    font-size: var(--t-small);
+    font-weight: 600;
+    color: var(--indigo);
+    background: var(--thread);
+    background-image: none;
+    padding: 0.3rem 0.7rem;
+    border-radius: 2px;
+  }
+  .home .lang {
+    top: 1rem;
+    transform: none;
+  }
+  .lang:hover {
+    color: var(--cobalt);
+  }
+
+  .site-header:not(.home) {
+    border-bottom: 1px solid var(--rule);
+  }
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    padding-block: 1.1rem;
+  }
+  .lockup {
+    display: grid;
+    color: var(--indigo);
+    background-image: none;
+    padding: 0;
+  }
+  .name {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 1.3125rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .studio {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: var(--t-small);
+    letter-spacing: 0.02em;
+    color: var(--cobalt);
+    margin-top: 0.2rem;
+  }
+
+  nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.8125rem;
+  }
+  nav a {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--indigo);
+    background-image: none;
+    padding-block: 0.4rem;
+  }
+  nav a:hover {
+    color: var(--cobalt);
+  }
+  nav a[aria-current='page'] {
+    color: var(--cobalt);
+  }
+  /* The card's centred dots between words, drawn so they sit at mid-height at any size. */
+  @media (min-width: 40rem) {
+    nav ul {
+      gap: 0 0.8em;
+      align-items: center;
+    }
+    nav a {
+      letter-spacing: 0.22em;
+    }
+    nav li {
+      display: flex;
+      align-items: center;
+    }
+    nav li + li::before {
+      content: '';
+      width: 0.22em;
+      height: 0.22em;
+      border-radius: 50%;
+      background: var(--indigo);
+      margin-right: 0.8em;
+      font-size: inherit;
+    }
+  }
+
+  /* Home: the business card, enlarged. */
+  .home .bar {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding-block: clamp(2.5rem, 7vw, 4.5rem) clamp(2rem, 5vw, 3rem);
+    border-bottom: 0;
+    gap: clamp(1rem, 2.5vw, 1.75rem);
+  }
+  .home .lockup {
+    justify-items: center;
+  }
+  .home .name {
+    font-size: clamp(1.75rem, 0.6rem + 5.2vw, 4.5rem);
+    letter-spacing: 0.06em;
+  }
+  .home .studio {
+    font-size: clamp(1rem, 0.8rem + 0.8vw, 1.3125rem);
+    margin-top: 0.5rem;
+  }
+  .home nav ul {
+    justify-content: center;
+  }
+  .home nav ul,
+  .home nav a {
+    font-size: clamp(0.875rem, 0.7rem + 0.9vw, 1.3125rem);
+  }
+  @media (min-width: 40rem) {
+    .home nav a {
+      letter-spacing: 0.28em;
+    }
+  }
+</style>

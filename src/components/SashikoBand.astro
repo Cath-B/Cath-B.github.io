@@ -1,0 +1,182 @@
+---
+// An indigo band of sashiko patches, drawn as running stitches, after the business card.
+// Patterns: shippō (overlapping circles), asanoha (hemp leaf), kikkō (tortoiseshell hexagons)
+// and a plain diagonal running stitch. With `animate`, the seams between patches sew themselves
+// in once on page load (skipped when the visitor prefers reduced motion).
+interface Props {
+  id: string;
+  height?: string;
+  animate?: boolean;
+}
+const { id, height = '3rem', animate = false } = Astro.props;
+
+const W = 1600;
+const H = 400;
+const f = (n: number) => +n.toFixed(2);
+const line = (x1: number, y1: number, x2: number, y2: number) =>
+  `M${f(x1)} ${f(y1)}L${f(x2)} ${f(y2)}`;
+
+// Shippō: circles on a square grid plus one in each cell centre.
+const S = 96;
+const shippo = [
+  [0, 0], [S, 0], [0, S], [S, S], [S / 2, S / 2],
+].map(([cx, cy]) => `M${cx - S / 2} ${cy}a${S / 2} ${S / 2} 0 1 0 ${S} 0a${S / 2} ${S / 2} 0 1 0 ${-S} 0`).join('');
+
+// Asanoha: triangular lattice; each triangle's edges plus lines from its corners to its centre.
+const A = 84;
+const AH = A * Math.sqrt(3);
+const asanohaParts: string[] = [];
+for (let row = -1; row <= 2; row++) {
+  for (let col = -1; col <= 2; col++) {
+    const y0 = (row * AH) / 2;
+    const y1 = y0 + AH / 2;
+    const xo = row % 2 === 0 ? 0 : A / 2;
+    const x = col * A + xo;
+    const tris = [
+      [[x, y1], [x + A / 2, y0], [x + A, y1]],
+      [[x + A / 2, y0], [x + A, y1], [x + (3 * A) / 2, y0]],
+    ];
+    for (const t of tris) {
+      const cx = (t[0][0] + t[1][0] + t[2][0]) / 3;
+      const cy = (t[0][1] + t[1][1] + t[2][1]) / 3;
+      for (let i = 0; i < 3; i++) {
+        const [px, py] = t[i];
+        const [qx, qy] = t[(i + 1) % 3];
+        asanohaParts.push(line(px, py, qx, qy), line(px, py, cx, cy));
+      }
+    }
+  }
+}
+const asanoha = asanohaParts.join('');
+
+// Kikkō: flat-topped hexagons with a small three-line star at each centre.
+const R = 44;
+const KW = 3 * R;
+const KH = R * Math.sqrt(3);
+const kikkoParts: string[] = [];
+const hex = (cx: number, cy: number) => {
+  const pts = Array.from({ length: 6 }, (_, i) => [
+    cx + R * Math.cos((Math.PI / 3) * i),
+    cy + R * Math.sin((Math.PI / 3) * i),
+  ]);
+  kikkoParts.push(`M${pts.map(([x, y]) => `${f(x)} ${f(y)}`).join('L')}Z`);
+  for (let i = 0; i < 3; i++) {
+    const a = (Math.PI / 3) * i + Math.PI / 6;
+    const r = R * 0.28;
+    kikkoParts.push(line(cx - r * Math.cos(a), cy - r * Math.sin(a), cx + r * Math.cos(a), cy + r * Math.sin(a)));
+  }
+};
+for (let i = -1; i <= 1; i++) {
+  for (let j = -1; j <= 1; j++) {
+    hex(i * KW, j * KH);
+    hex(i * KW + KW / 2, j * KH + KH / 2);
+  }
+}
+const kikko = kikkoParts.join('');
+
+// Patches, as polygons across the band, with the pattern each one carries.
+const patches = [
+  { pts: [[0, 0], [430, 0], [350, 400], [0, 400]], pat: 'shippo', tone: '#18264A' },
+  { pts: [[430, 0], [930, 0], [1000, 400], [350, 400]], pat: 'asanoha', tone: '#1B2B54' },
+  { pts: [[930, 0], [1260, 0], [1190, 400], [1000, 400]], pat: 'kikko', tone: '#162344' },
+  { pts: [[1260, 0], [1600, 0], [1600, 400], [1190, 400]], pat: 'diagonal', tone: '#1A2850' },
+];
+const seams = [
+  [[430, 0], [350, 400]],
+  [[930, 0], [1000, 400]],
+  [[1260, 0], [1190, 400]],
+];
+// Each seam is two parallel rows of stitches, like the edges of a patch.
+const seamPaths = seams.flatMap(([[x1, y1], [x2, y2]]) => {
+  const len = Math.hypot(x2 - x1, y2 - y1);
+  const nx = ((y2 - y1) / len) * 7;
+  const ny = (-(x2 - x1) / len) * 7;
+  return [line(x1 + nx, y1 + ny, x2 + nx, y2 + ny), line(x1 - nx, y1 - ny, x2 - nx, y2 - ny)];
+});
+const pts = (p: number[][]) => p.map(([x, y]) => `${x},${y}`).join(' ');
+---
+
+<div class="band" style={`--band-h:${height}`} aria-hidden="true">
+  <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid slice" focusable="false">
+    <defs>
+      <pattern id={`${id}-shippo`} width={S} height={S} patternUnits="userSpaceOnUse">
+        <path d={shippo} class="thread" />
+      </pattern>
+      <pattern id={`${id}-asanoha`} width={A} height={AH} patternUnits="userSpaceOnUse" patternTransform="rotate(8)">
+        <path d={asanoha} class="thread" />
+      </pattern>
+      <pattern id={`${id}-kikko`} width={KW} height={KH} patternUnits="userSpaceOnUse" patternTransform="rotate(-6)">
+        <path d={kikko} class="thread" />
+      </pattern>
+      <pattern id={`${id}-diagonal`} width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+        <path d="M-6 20H46" class="thread" />
+      </pattern>
+      {patches.map((p, i) => (
+        <clipPath id={`${id}-clip-${i}`}>
+          <polygon points={pts(p.pts)} />
+        </clipPath>
+      ))}
+      {animate && (
+        <mask id={`${id}-sew`} maskUnits="userSpaceOnUse" x="0" y="0" width={W} height={H}>
+          {seamPaths.map((d, i) => (
+            <path d={d} pathLength="1" class="sew" style={`animation-delay:${0.25 + Math.floor(i / 2) * 0.35}s`} />
+          ))}
+        </mask>
+      )}
+    </defs>
+    {patches.map((p, i) => (
+      <g clip-path={`url(#${id}-clip-${i})`}>
+        <polygon points={pts(p.pts)} fill={p.tone} />
+        <rect x="-50" y="-50" width={W + 100} height={H + 100} fill={`url(#${id}-${p.pat})`} />
+      </g>
+    ))}
+    <g mask={animate ? `url(#${id}-sew)` : undefined}>
+      {seamPaths.map((d) => <path d={d} class="thread seam" />)}
+    </g>
+  </svg>
+</div>
+
+<style>
+  .band {
+    height: var(--band-h);
+    background: var(--indigo);
+    overflow: hidden;
+  }
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .thread {
+    fill: none;
+    stroke: var(--thread);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 10 8;
+    opacity: 0.88;
+  }
+  .seam {
+    stroke-width: 3.4;
+    stroke-dasharray: 12 7;
+    opacity: 1;
+  }
+  .sew {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 30;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: sew 1.3s cubic-bezier(0.45, 0, 0.3, 1) forwards;
+  }
+  @keyframes sew {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sew {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+  }
+</style>

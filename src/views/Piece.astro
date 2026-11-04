@@ -1,0 +1,243 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import type { Piece } from '../lib/content';
+import { type Lang, routes, otherLang, pieceUrl, ui } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  piece: Piece;
+}
+const { lang, piece } = Astro.props;
+const t = ui[lang];
+const d = piece.data;
+const text = d[lang];
+
+const copy = {
+  sv: {
+    back: 'Alla plagg',
+    perfectFor: 'Perfekt för',
+    facts: { garment: 'Plagg', size: 'Storlek', material: 'Material', care: 'Skötsel', price: 'Pris' },
+    photo: (n: number, of: number) => `${text.title}, bild ${n} av ${of}`,
+    reserveTitle: 'Reservera plagget',
+    reserveLead:
+      'Skicka formuläret så håller jag plagget åt dig. Jag bekräftar inom två arbetsdagar och skickar betalningsuppgifter för Swish.',
+    taken: {
+      reserved: 'Det här plagget är reserverat. Mejla mig om du vill veta om det blir tillgängligt igen.',
+      sold: 'Det här plagget är sålt. Hör av dig om du vill ha något liknande.',
+    },
+    f: {
+      name: 'Namn',
+      email: 'E-post',
+      phone: 'Telefon',
+      message: 'Meddelande',
+      messageHint: 'Frågor om plagget, upphämtning eller leverans.',
+      submit: 'Reservera plagget',
+      success: `Tack! Din reservation av ${text.title} är mottagen. Jag bekräftar inom två arbetsdagar och skickar betalningsuppgifter för Swish.`,
+    },
+  },
+  en: {
+    back: 'All pieces',
+    perfectFor: 'Perfect for',
+    facts: { garment: 'Garment', size: 'Size', material: 'Material', care: 'Care', price: 'Price' },
+    photo: (n: number, of: number) => `${text.title}, photo ${n} of ${of}`,
+    reserveTitle: 'Reserve this piece',
+    reserveLead:
+      "Send the form and I'll hold the piece for you. I'll confirm within two working days and send payment details for Swish.",
+    taken: {
+      reserved: "This piece is reserved. Email me if you'd like to hear if it becomes available again.",
+      sold: "This piece has been sold. Get in touch if you'd like something similar.",
+    },
+    f: {
+      name: 'Name',
+      email: 'Email',
+      phone: 'Phone',
+      message: 'Message',
+      messageHint: 'Questions about the piece, pick-up or delivery.',
+      submit: 'Reserve this piece',
+      success: `Thanks! Your reservation of ${text.title} has been received. I'll confirm within two working days and send payment details for Swish.`,
+    },
+  },
+}[lang];
+
+const priceText = d.price ? t.currency(d.price) : t.priceOnRequest;
+const facts = [
+  [copy.facts.garment, text.garment],
+  [copy.facts.size, d.size],
+  [copy.facts.material, text.material],
+  [copy.facts.care, text.care],
+  [copy.facts.price, priceText],
+].filter((pair): pair is [string, string] => Boolean(pair[1]));
+
+const og = d.images[0] ? await getImage({ src: d.images[0], width: 1200, format: 'jpg' }) : undefined;
+---
+
+<Base
+  lang={lang}
+  title={text.title}
+  description={`${text.motifs}. ${text.tagline}.`}
+  alternate={pieceUrl(otherLang(lang), piece.id)}
+  current="shop"
+  image={og?.src}
+>
+  <div class="wrap piece">
+    <div class="gallery" role="group" aria-label={text.title}>
+      {d.images.map((img, i) => (
+        <Image
+          src={img}
+          alt={copy.photo(i + 1, d.images.length)}
+          widths={[480, 720, 960, 1280]}
+          sizes="(min-width: 60rem) 55vw, 90vw"
+          loading={i === 0 ? 'eager' : 'lazy'}
+        />
+      ))}
+    </div>
+
+    <div class="details">
+      <p class="ui back"><a href={routes.shop[lang]}>{copy.back}</a></p>
+      <h1>{text.title}</h1>
+      <p class="motifs">{text.motifs}</p>
+      <p class="tagline">{text.tagline}</p>
+      <p>{text.story}</p>
+      <p><strong class="ui">{copy.perfectFor}:</strong> {text.perfectFor}</p>
+
+      <dl class="facts ui">
+        {facts.map(([k, v]) => (
+          <div>
+            <dt>{k}</dt>
+            <dd>{v}</dd>
+          </div>
+        ))}
+        {d.status !== 'available' && (
+          <div>
+            <dt>Status</dt>
+            <dd class="status">{t.status[d.status]}</dd>
+          </div>
+        )}
+      </dl>
+
+      {d.status === 'available' ? (
+        <section aria-labelledby="reserve" class="reserve">
+          <h2 id="reserve">{copy.reserveTitle}</h2>
+          <p>{copy.reserveLead}</p>
+          <EnquiryForm
+            lang={lang}
+            formType="shop-reservation"
+            subject={`Reservation: ${d.en.title}`}
+            submitLabel={copy.f.submit}
+            successMessage={copy.f.success}
+            hidden={{ piece: `${d.en.title} / ${d.sv.title}`, price: priceText, page: pieceUrl(lang, piece.id) }}
+            fields={[
+              { name: 'name', label: copy.f.name, required: true, autocomplete: 'name' },
+              { name: 'email', label: copy.f.email, type: 'email', required: true, autocomplete: 'email' },
+              { name: 'phone', label: copy.f.phone, type: 'tel', autocomplete: 'tel' },
+              { name: 'message', label: copy.f.message, type: 'textarea', hint: copy.f.messageHint },
+            ]}
+          />
+        </section>
+      ) : (
+        <p class="taken">{copy.taken[d.status]}</p>
+      )}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .piece {
+    display: grid;
+    gap: 2rem 4rem;
+    padding-block: clamp(1.5rem, 4vw, 3.5rem);
+  }
+  @media (min-width: 60rem) {
+    .piece {
+      grid-template-columns: 7fr 5fr;
+      align-items: start;
+    }
+    .details {
+      position: sticky;
+      top: 1.5rem;
+    }
+  }
+
+  /* Phones: swipe through the photos. Wide screens: photos stacked. */
+  .gallery {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 88%;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+  }
+  .gallery :global(img) {
+    scroll-snap-align: center;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    background: var(--wash);
+  }
+  @media (min-width: 60rem) {
+    .gallery {
+      grid-auto-flow: row;
+      grid-auto-columns: auto;
+      overflow: visible;
+      margin-inline: 0;
+      padding-inline: 0;
+      gap: 1rem;
+    }
+    .gallery :global(img) {
+      aspect-ratio: auto;
+    }
+  }
+
+  .back {
+    margin-bottom: 1.5rem;
+  }
+  h1 {
+    margin-bottom: 0.2em;
+  }
+  .motifs {
+    font-style: italic;
+    font-size: var(--t-h4);
+    color: var(--indigo-soft);
+    margin-bottom: 1.25rem;
+  }
+  .tagline {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: var(--t-h4);
+    line-height: 1.35;
+  }
+  .facts {
+    margin: 2rem 0;
+    border-top: 2px solid var(--indigo);
+  }
+  .facts div {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 1rem;
+    padding-block: 0.6rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  dt {
+    color: var(--indigo-soft);
+  }
+  dd {
+    margin: 0;
+    font-weight: 600;
+  }
+  .status {
+    color: var(--madder);
+  }
+  .reserve h2 {
+    font-size: var(--t-h3);
+    font-weight: 600;
+  }
+  .taken {
+    font-family: var(--sans);
+    border-left: 4px solid var(--madder);
+    padding-left: 1rem;
+  }
+</style>

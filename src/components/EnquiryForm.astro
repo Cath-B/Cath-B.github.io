@@ -1,0 +1,130 @@
+---
+import { FORMSPREE_ENDPOINT } from '../config';
+import { type Lang, ui } from '../i18n';
+
+export type Field = {
+  name: string;
+  label: string;
+  type?: 'text' | 'email' | 'tel' | 'number' | 'url' | 'textarea' | 'select';
+  required?: boolean;
+  hint?: string;
+  options?: string[];
+  autocomplete?: string;
+  placeholder?: string;
+  min?: number;
+};
+
+interface Props {
+  lang: Lang;
+  /** Shown in Formspree so Catherine can tell the forms apart. */
+  formType: string;
+  subject: string;
+  /** A field, or a pair of fields shown side by side on wide screens. */
+  fields: (Field | [Field, Field])[];
+  submitLabel: string;
+  successMessage: string;
+  hidden?: Record<string, string>;
+}
+const { lang, formType, subject, fields, submitLabel, successMessage, hidden = {} } = Astro.props;
+const t = ui[lang];
+const uid = formType;
+
+if (FORMSPREE_ENDPOINT.includes('REPLACE_ME')) {
+  console.warn('[forms] FORMSPREE_ENDPOINT in src/config.ts is still a placeholder.');
+}
+---
+
+<form
+  class="form enquiry"
+  action={FORMSPREE_ENDPOINT}
+  method="POST"
+  data-success={successMessage}
+  data-error={t.sendError}
+  data-sending={t.sending}
+>
+  <input type="hidden" name="form" value={formType} />
+  <input type="hidden" name="_subject" value={subject} />
+  <input type="hidden" name="language" value={lang} />
+  {Object.entries(hidden).map(([name, value]) => <input type="hidden" name={name} value={value} />)}
+  <div class="visually-hidden" aria-hidden="true">
+    <label for={`${uid}-gotcha`}>Leave this empty</label>
+    <input id={`${uid}-gotcha`} type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+  </div>
+
+  {fields.map((group) => {
+    const list = Array.isArray(group) ? group : [group];
+    const items = list.map((f) => {
+      const id = `${uid}-${f.name}`;
+      const hintId = f.hint ? `${id}-hint` : undefined;
+      return (
+        <div class="field">
+          <label for={id}>
+            {f.label}
+            {!f.required && <span class="hint"> ({t.optional})</span>}
+          </label>
+          {f.hint && <span class="hint" id={hintId}>{f.hint}</span>}
+          {f.type === 'textarea' ? (
+            <textarea id={id} name={f.name} required={f.required} aria-describedby={hintId} placeholder={f.placeholder} />
+          ) : f.type === 'select' ? (
+            <select id={id} name={f.name} required={f.required} aria-describedby={hintId}>
+              {f.options?.map((o) => <option>{o}</option>)}
+            </select>
+          ) : (
+            <input
+              id={id}
+              name={f.name}
+              type={f.type ?? 'text'}
+              required={f.required}
+              autocomplete={f.autocomplete}
+              aria-describedby={hintId}
+              placeholder={f.placeholder}
+              min={f.min}
+            />
+          )}
+        </div>
+      );
+    });
+    return list.length > 1 ? <div class="row">{items}</div> : items;
+  })}
+
+  <div>
+    <button class="button" type="submit">{submitLabel}</button>
+  </div>
+  <p class="form-message" role="status" hidden></p>
+</form>
+
+<script>
+  for (const form of document.querySelectorAll<HTMLFormElement>('form.enquiry')) {
+    const message = form.querySelector<HTMLElement>('.form-message')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    const label = button.textContent;
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      button.disabled = true;
+      button.textContent = form.dataset.sending ?? '…';
+      message.hidden = true;
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) throw new Error(String(response.status));
+        const done = document.createElement('p');
+        done.className = 'form-message';
+        done.setAttribute('role', 'status');
+        done.tabIndex = -1;
+        done.textContent = form.dataset.success ?? '';
+        form.replaceWith(done);
+        done.focus();
+      } catch {
+        message.dataset.kind = 'error';
+        message.textContent = form.dataset.error ?? '';
+        message.hidden = false;
+        button.disabled = false;
+        button.textContent = label;
+      }
+    });
+  }
+</script>
