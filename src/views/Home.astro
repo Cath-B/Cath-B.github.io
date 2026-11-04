@@ -1,0 +1,262 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PieceCard from '../components/PieceCard.astro';
+import { getShopPieces, getPosts } from '../lib/content';
+import { type Lang, routes, otherLang, postUrl, nbsp } from '../i18n';
+import workshopPhoto from '../assets/workshop-sashiko-patterns.jpg';
+import lessonPhoto from '../assets/embroidering-hat.jpg';
+import portrait from '../assets/catherine-portrait.jpg';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+// Page texts. Edit the words here; keep the Swedish and English in step.
+const copy = {
+  sv: {
+    description:
+      'Catherine Brockman och Inkling Lab i Stockholm: textilworkshops för grupper och företag, sylektioner en till en och unika handbroderade plagg.',
+    lead: 'Inkling Lab är min textilstudio i Stockholm. Jag håller kreativa workshops för grupper, lär ut sömnad en till en och lagar och smyckar plagg som blir helt unika.',
+    offers: [
+      {
+        title: 'Workshops för grupper',
+        text: 'Synlig lagning, sashiko och upcycling för personaldagar och kvällar med vänner. Jag tar med allt, ni tar med er själva.',
+        fact: 'Vängrupper från 650 kr per person. Företag från 7 000 kr exkl. moms.',
+        link: 'Se workshops och priser',
+      },
+      {
+        title: 'Sylektioner, en till en',
+        text: 'Lär dig sy det du faktiskt vill göra: en cosplaydräkt, ett plagg som sitter som det ska eller lagningen du har skjutit upp.',
+        fact: 'Berätta om ditt projekt så föreslår jag ett upplägg.',
+        link: 'Om lektionerna',
+      },
+      {
+        title: 'Unika plagg',
+        text: 'Plagg med ett tidigare liv som jag har lagat och broderat för hand, med motiv som berättar en historia.',
+        fact: 'Reservera här och betala med Swish.',
+        link: 'Till butiken',
+      },
+    ],
+    aboutTitle: 'Hej, jag heter Catherine',
+    about: [
+      'Jag är kreatör, upcycler och workshopledare i Stockholm, och Inkling Lab är namnet på min studio.',
+      'Mina workshops handlar om mer än att lära sig en teknik. De handlar om att umgås, skapa något med händerna och få modet att göra om vilket plagg som helst.',
+      'Du behöver inte vara pysslig, bara nyfiken. Jag tar med allt som behövs, från verktyg till idéer.',
+    ],
+    portraitAlt: 'Catherine Brockman i en vit skjorta som hon har broderat med röda pärlor.',
+    shopTitle: 'Nytt i butiken',
+    shopAll: 'Alla plagg',
+    blogTitle: 'Från bloggen',
+  },
+  en: {
+    description:
+      'Catherine Brockman and Inkling Lab in Stockholm: textile workshops for groups and companies, one-to-one sewing lessons, and one-of-a-kind hand-embroidered clothes.',
+    lead: 'Inkling Lab is my textile studio in Stockholm. I run creative workshops for groups, teach sewing one to one, and mend and embellish clothes so each one is one of a kind.',
+    offers: [
+      {
+        title: 'Workshops for groups',
+        text: 'Visible mending, sashiko and upcycling for team days and nights with friends. I bring everything, you bring the people.',
+        fact: 'Friend groups from 650 SEK per person. Companies from 7 000 SEK ex. VAT.',
+        link: 'See workshops and prices',
+      },
+      {
+        title: 'Sewing lessons, one to one',
+        text: "Learn to sew the thing you actually want to make: a cosplay costume, a garment that fits, or the repair you've been putting off.",
+        fact: "Tell me about your project and I'll suggest a plan.",
+        link: 'About the lessons',
+      },
+      {
+        title: 'One-of-a-kind clothes',
+        text: "Pre-loved garments I've repaired and embroidered by hand, with motifs that tell a story.",
+        fact: 'Reserve a piece here, pay by Swish.',
+        link: 'Visit the shop',
+      },
+    ],
+    aboutTitle: "Hello, I'm Catherine",
+    about: [
+      "I'm a maker, upcycler and workshop facilitator based in Stockholm, and Inkling Lab is the name of my studio.",
+      'My group workshops are about more than learning a skill. They’re about connecting with others, creating something by hand, and feeling free to customise any textile you like.',
+      'You don’t need to be crafty, just curious. I’ll bring everything you need, from tools to ideas.',
+    ],
+    portraitAlt: 'Catherine Brockman in a white shirt she has embroidered with red beads.',
+    shopTitle: 'New in the shop',
+    shopAll: 'All pieces',
+    blogTitle: 'From the blog',
+  },
+}[lang];
+
+const offerLinks = [routes.workshops[lang], routes.lessons[lang], routes.shop[lang]];
+const pieces = (await getShopPieces()).filter((p) => p.data.status === 'available').slice(0, 3);
+const offerImages = [workshopPhoto, lessonPhoto, pieces[0]?.data.images[0] ?? lessonPhoto];
+const offerAlts = {
+  sv: ['Händer som syr sashiko vid ett bord med mönster och garn.', 'Händer som broderar blommor på en persikofärgad mössa.', 'Ett handbroderat plagg från butiken.'],
+  en: ['Hands stitching sashiko at a table with patterns and thread.', 'Hands embroidering flowers onto a peach cap.', 'A hand-embroidered garment from the shop.'],
+}[lang];
+const posts = await getPosts(lang);
+---
+
+<Base lang={lang} description={copy.description} alternate={routes.home[otherLang(lang)]} home>
+  <div class="wrap intro">
+    <p class="lead">{copy.lead}</p>
+  </div>
+
+  <section class="section wrap offers" aria-label={lang === 'sv' ? 'Det här gör jag' : 'What I do'}>
+    {copy.offers.map((o, i) => (
+      <article class="offer">
+        <Image src={offerImages[i]} alt={offerAlts[i]} widths={[400, 600, 800]} sizes="(min-width: 56rem) 30vw, 100vw" />
+        <h2>{o.title}</h2>
+        <p>{o.text}</p>
+        <p class="fact ui">{nbsp(o.fact)}</p>
+        <p class="ui"><a href={offerLinks[i]}>{o.link}</a></p>
+      </article>
+    ))}
+  </section>
+
+  <section class="quote-band">
+    <figure class="wrap">
+      <blockquote lang="en">
+        <p>“Your proposal was quite popular. Out of all of the activities we had planned, yours filled the quickest!”</p>
+      </blockquote>
+      <figcaption class="ui">Nathan Pires, Manager Inclusion EMEA, Warner Bros. Discovery</figcaption>
+    </figure>
+  </section>
+
+  <section class="section wrap about">
+    <Image src={portrait} alt={copy.portraitAlt} widths={[400, 640, 900]} sizes="(min-width: 48rem) 40vw, 100vw" />
+    <div>
+      <h2>{copy.aboutTitle}</h2>
+      {copy.about.map((p) => <p>{p}</p>)}
+    </div>
+  </section>
+
+  {pieces.length > 0 && (
+    <section class="section wrap">
+      <div class="heading-row">
+        <h2>{copy.shopTitle}</h2>
+        <p class="ui"><a href={routes.shop[lang]}>{copy.shopAll}</a></p>
+      </div>
+      <div class="pieces">
+        {pieces.map((piece) => <PieceCard piece={piece} lang={lang} />)}
+      </div>
+    </section>
+  )}
+
+  <section class="section wrap">
+    <h2>{copy.blogTitle}</h2>
+    <ul class="posts">
+      {posts.map((post) => (
+        <li>
+          <h3 lang={post.lang}><a href={postUrl(lang, post.slug)}>{post.entry.data.title}</a></h3>
+          <p lang={post.lang}>{post.entry.data.summary}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    text-align: center;
+    padding-bottom: clamp(1rem, 3vw, 2rem);
+  }
+  .intro .lead {
+    margin-inline: auto;
+  }
+
+  .offers {
+    display: grid;
+    padding-top: clamp(1.5rem, 4vw, 2.5rem);
+    gap: clamp(2.5rem, 5vw, 3rem);
+  }
+  @media (min-width: 56rem) {
+    .offers {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .offer :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    margin-bottom: 1.25rem;
+  }
+  .offer h2 {
+    font-size: var(--t-h3);
+    font-weight: 600;
+  }
+  .fact {
+    color: var(--indigo-soft);
+  }
+
+  .quote-band {
+    background: var(--indigo);
+    color: var(--thread);
+    padding-block: clamp(3rem, 8vw, 5rem);
+  }
+  .quote-band figure {
+    margin: 0 auto;
+  }
+  blockquote {
+    margin: 0 0 1.25rem;
+  }
+  blockquote p {
+    font-size: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+    line-height: 1.3;
+    font-style: italic;
+    max-width: 24em;
+    margin: 0;
+  }
+  figcaption {
+    opacity: 0.85;
+  }
+
+  .about {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  @media (min-width: 48rem) {
+    .about {
+      grid-template-columns: 5fr 7fr;
+    }
+  }
+  .about :global(img) {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .heading-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin-bottom: 1.5rem;
+  }
+  .heading-row h2 {
+    margin: 0;
+  }
+  .pieces {
+    display: grid;
+    gap: 2.5rem 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  }
+
+  .posts {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: grid;
+    gap: 1.75rem;
+  }
+  .posts h3 {
+    font-size: var(--t-h4);
+    margin-bottom: 0.25rem;
+  }
+  .posts p {
+    margin: 0;
+    color: var(--indigo-soft);
+  }
+</style>

@@ -1,0 +1,207 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import PriceList from '../components/PriceList.astro';
+import { getWorkshops } from '../lib/content';
+import { type Lang, routes, otherLang } from '../i18n';
+import tablePhoto from '../assets/workshop-table.jpg';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const copy = {
+  sv: {
+    title: 'Workshops för grupper',
+    description:
+      'Textilworkshops i Stockholm för företag och vängrupper: synlig lagning, sashiko och upcycling. Jag kommer till er med allt material.',
+    lead: 'Ingen lokal att hyra och ingen resa för gruppen. Jag tar med alla verktyg och material och ställer i ordning i vilket rum som helst med bord och stolar. Alla går hem med något de har gjort själva.',
+    photoAlt: 'Deltagare syr vid ett långbord på en Inkling Lab-workshop.',
+    teamsTitle: 'För företag och arbetslag',
+    teamsSub: 'Kreativ teambuilding med något att ta med hem.',
+    teamsTerms: [
+      'Alla priser exkl. moms. I priset ingår undervisning, förberedelser, standardmaterial och resor inom Stockholm.',
+      'På svenska eller engelska. Inga förkunskaper behövs.',
+      'Ni ordnar ett rum, bord och stolar (helst ett bord per fyra personer). Jag kommer 45 minuter innan för att ställa i ordning.',
+    ],
+    friendsTitle: 'För vängrupper',
+    friendsSub: 'Födelsedagar, möhippor, en kväll hemma med vänner eller bara för att.',
+    friendsTerms: [
+      'För 8–12 personer, några fler enligt överenskommelse. Minsta bokning är 5 200 kr, så mindre grupper betalar minimibeloppet.',
+      'I priset ingår material, undervisning och resor inom Stockholm. Jag kommer hem till dig eller till er lokal.',
+      'Ni behöver ett eller två bord och en stol per person. Ta med tilltugg och egen dryck. Inga förkunskaper behövs.',
+    ],
+    termsLabel: 'Bra att veta',
+    formTitle: 'Fråga om ett datum',
+    formLead: 'Berätta datum, gruppstorlek och plats så svarar jag inom två arbetsdagar.',
+    notSure: 'Vet inte än',
+    f: {
+      name: 'Namn',
+      organisation: 'Företag eller organisation',
+      email: 'E-post',
+      phone: 'Telefon',
+      workshop: 'Workshop',
+      dates: 'Önskat datum',
+      datesHint: 'Ett datum, eller några alternativ.',
+      size: 'Antal deltagare',
+      location: 'Plats',
+      locationHint: 'Adress eller område, t.ex. ert kontor i Solna.',
+      language: 'Språk',
+      languages: ['Svenska', 'Engelska', 'Spelar ingen roll'],
+      message: 'Tillfälle och övrigt',
+      messageHint: 'Vad firar ni, och finns det något jag bör veta?',
+      submit: 'Skicka förfrågan',
+      success: 'Tack! Förfrågan är skickad. Jag svarar inom två arbetsdagar.',
+    },
+  },
+  en: {
+    title: 'Group workshops',
+    description:
+      'Textile workshops in Stockholm for companies and friend groups: visible mending, sashiko and upcycling. I come to you with all the materials.',
+    lead: 'No venue hire and no travel for your group. I bring all the tools and materials and set up in any room with tables and chairs. Everyone leaves with something they made.',
+    photoAlt: 'Participants stitching at a long table during an Inkling Lab workshop.',
+    teamsTitle: 'For teams and companies',
+    teamsSub: 'Creative team building with something to take home.',
+    teamsTerms: [
+      'All prices exclude VAT (moms). They include teaching, set-up, standard materials and travel within Stockholm.',
+      'In English or Swedish. No experience needed.',
+      'You provide a room, tables and chairs (one table per four people is ideal). I arrive 45 minutes early to set up.',
+    ],
+    friendsTitle: 'For friend groups',
+    friendsSub: 'Birthdays, hen parties, nights in with friends, or just because.',
+    friendsTerms: [
+      'For 8–12 people, a few more by arrangement. The minimum booking is 5 200 SEK, so smaller groups pay the minimum.',
+      'Prices include materials, teaching and travel within Stockholm. I come to your home or venue.',
+      'You need a table or two and a chair for everyone. Bring snacks and your own drinks. No experience needed.',
+    ],
+    termsLabel: 'Good to know',
+    formTitle: 'Ask about a date',
+    formLead: "Tell me the date, group size and location, and I'll reply within two working days.",
+    notSure: 'Not sure yet',
+    f: {
+      name: 'Name',
+      organisation: 'Company or organisation',
+      email: 'Email',
+      phone: 'Phone',
+      workshop: 'Workshop',
+      dates: 'Preferred date',
+      datesHint: 'One date, or a few options.',
+      size: 'Number of people',
+      location: 'Location',
+      locationHint: 'Address or area, e.g. your office in Solna.',
+      language: 'Language',
+      languages: ['English', 'Swedish', 'Either'],
+      message: 'Occasion and anything else',
+      messageHint: "What's the occasion, and is there anything I should know?",
+      submit: 'Send enquiry',
+      success: "Thanks! Your enquiry is on its way. I'll reply within two working days.",
+    },
+  },
+}[lang];
+
+const teams = await getWorkshops('teams');
+const friends = await getWorkshops('friends');
+const f = copy.f;
+const workshopOptions = [copy.notSure, ...[...teams, ...friends].map((w) => w.data[lang].title)];
+---
+
+<Base lang={lang} title={copy.title} description={copy.description} alternate={routes.workshops[otherLang(lang)]} current="workshops">
+  <section class="wrap hero">
+    <div>
+      <h1>{copy.title}</h1>
+      <p class="lead">{copy.lead}</p>
+      <p class="ui"><a href="#enquiry">{copy.formTitle}</a></p>
+    </div>
+    <Image src={tablePhoto} alt={copy.photoAlt} widths={[480, 720, 960, 1280]} sizes="(min-width: 56rem) 45vw, 100vw" />
+  </section>
+
+  <section class="section wrap" aria-labelledby="teams">
+    <h2 id="teams">{copy.teamsTitle}</h2>
+    <p class="sub">{copy.teamsSub}</p>
+    <PriceList workshops={teams} lang={lang} />
+    <div class="terms">
+      <h3>{copy.termsLabel}</h3>
+      {copy.teamsTerms.map((p) => <p>{p}</p>)}
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="friends">
+    <h2 id="friends">{copy.friendsTitle}</h2>
+    <p class="sub">{copy.friendsSub}</p>
+    <PriceList workshops={friends} lang={lang} />
+    <div class="terms">
+      <h3>{copy.termsLabel}</h3>
+      {copy.friendsTerms.map((p) => <p>{p}</p>)}
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="enquiry">
+    <h2 id="enquiry">{copy.formTitle}</h2>
+    <p>{copy.formLead}</p>
+    <EnquiryForm
+      lang={lang}
+      formType="group-workshop"
+      subject="Workshop enquiry"
+      submitLabel={f.submit}
+      successMessage={f.success}
+      fields={[
+        [
+          { name: 'name', label: f.name, required: true, autocomplete: 'name' },
+          { name: 'organisation', label: f.organisation, autocomplete: 'organization' },
+        ],
+        [
+          { name: 'email', label: f.email, type: 'email', required: true, autocomplete: 'email' },
+          { name: 'phone', label: f.phone, type: 'tel', autocomplete: 'tel' },
+        ],
+        { name: 'workshop', label: f.workshop, type: 'select', options: workshopOptions },
+        [
+          { name: 'dates', label: f.dates, required: true, hint: f.datesHint },
+          { name: 'group_size', label: f.size, type: 'number', required: true, min: 1 },
+        ],
+        [
+          { name: 'location', label: f.location, required: true, hint: f.locationHint },
+          { name: 'workshop_language', label: f.language, type: 'select', options: f.languages },
+        ],
+        { name: 'message', label: f.message, type: 'textarea', hint: f.messageHint },
+      ]}
+    />
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    gap: 2rem 4rem;
+    align-items: center;
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  }
+  @media (min-width: 56rem) {
+    .hero {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .hero :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .sub {
+    font-size: var(--t-h4);
+    color: var(--indigo-soft);
+    margin-bottom: 2rem;
+  }
+  .terms {
+    margin-top: 2.5rem;
+    max-width: var(--measure);
+  }
+  .terms h3 {
+    font-size: var(--t-ui);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .terms p {
+    margin-bottom: 0.6em;
+  }
+</style>

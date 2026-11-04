@@ -1,0 +1,71 @@
+---
+import '@fontsource-variable/montserrat';
+import '@fontsource-variable/literata/opsz.css';
+import '@fontsource-variable/literata/opsz-italic.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { type Lang, type PageKey, otherLang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  /** Page name; the site name is added after it. Leave out on the home page. */
+  title?: string;
+  description: string;
+  /** Address of this same page in the other language. */
+  alternate: string;
+  current?: PageKey;
+  home?: boolean;
+  image?: string;
+  /**
+   * Set when this page shows content that only exists in the other language (an untranslated
+   * blog post). Search engines are pointed at the original instead of seeing two copies.
+   */
+  canonicalPath?: string;
+}
+const { lang, title, description, alternate, current, home = false, image = '/og.jpg', canonicalPath } = Astro.props;
+const fullTitle = title
+  ? `${title} | Catherine Brockman, Inkling Lab`
+  : 'Catherine Brockman | Inkling Lab, Stockholm';
+const other = otherLang(lang);
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, Astro.site);
+const alt = new URL(alternate, Astro.site);
+const svUrl = lang === 'sv' ? canonical : alt;
+const ogImage = new URL(image, Astro.site);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Catherine Brockman" />
+    <link rel="canonical" href={canonical} />
+    {!canonicalPath && (
+      <>
+        <link rel="alternate" hreflang={lang} href={canonical} />
+        <link rel="alternate" hreflang={other} href={alt} />
+        <link rel="alternate" hreflang="x-default" href={svUrl} />
+      </>
+    )}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#18264a" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Catherine Brockman, Inkling Lab" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={lang === 'sv' ? 'sv_SE' : 'en_GB'} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <Header lang={lang} current={current} alternate={alternate} home={home} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

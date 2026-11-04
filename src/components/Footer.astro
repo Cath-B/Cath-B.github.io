@@ -1,0 +1,87 @@
+---
+// The back of the business card: contact details on indigo.
+import { contact } from '../config';
+import { type Lang, ui } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang];
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap grid">
+    <div>
+      <p class="name">Catherine Brockman</p>
+      <p class="about">{t.footerAbout}</p>
+    </div>
+    <ul class="contact" aria-label={t.footerFind}>
+      <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
+      <li><a href={contact.phoneLink}>{contact.phoneDisplay}</a></li>
+      <li><a href={contact.instagram}>{contact.instagramHandle}</a></li>
+      <li class="also">
+        <a href={contact.whatsapp}>WhatsApp</a>
+        <a href={contact.facebook}>Facebook</a>
+        <a href={contact.pinterest}>Pinterest</a>
+      </li>
+    </ul>
+  </div>
+  <div class="wrap legal">© {year} Inkling Lab AB</div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--indigo);
+    color: var(--thread);
+    font-family: var(--sans);
+    padding-block: clamp(2.5rem, 6vw, 4rem) 1.5rem;
+    margin-top: clamp(3rem, 8vw, 6rem);
+  }
+  .grid {
+    display: grid;
+    gap: 2rem;
+  }
+  @media (min-width: 48rem) {
+    .grid {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+  }
+  .name {
+    font-weight: 300;
+    font-size: var(--t-h3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 0.5rem;
+  }
+  .about {
+    margin: 0;
+    font-size: var(--t-ui);
+    opacity: 0.85;
+  }
+  .contact {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+    font-size: var(--t-h4);
+  }
+  .contact a {
+    color: var(--thread);
+  }
+  .also {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    font-size: var(--t-ui);
+    margin-top: 0.5rem;
+  }
+  .legal {
+    margin-top: 2.5rem;
+    font-size: var(--t-small);
+    opacity: 0.7;
+  }
+</style>

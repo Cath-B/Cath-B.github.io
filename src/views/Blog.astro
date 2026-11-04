@@ -1,0 +1,71 @@
+---
+import Base from '../layouts/Base.astro';
+import { getPosts } from '../lib/content';
+import { type Lang, routes, otherLang, postUrl } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = {
+  sv: {
+    title: 'The Inkwell',
+    sub: 'Om lagning, sashiko, workshops och att få saker att hålla.',
+    description: 'Catherine Brockmans blogg om synlig lagning, sashiko, workshops och att få kläder att hålla.',
+    navTitle: 'Blogg',
+  },
+  en: {
+    title: 'The Inkwell',
+    sub: 'On mending, sashiko, workshops and making things last.',
+    description: "Catherine Brockman's blog about visible mending, sashiko, workshops and making clothes last.",
+    navTitle: 'Blog',
+  },
+}[lang];
+const posts = await getPosts(lang);
+---
+
+<Base lang={lang} title={copy.navTitle} description={copy.description} alternate={routes.blog[otherLang(lang)]} current="blog">
+  <section class="wrap intro">
+    <h1>{copy.title}</h1>
+    <p class="lead">{copy.sub}</p>
+  </section>
+  <section class="wrap">
+    <ul class="posts">
+      {posts.map((post) => (
+        <li lang={post.lang}>
+          <h2><a href={postUrl(lang, post.slug)}>{post.entry.data.title}</a></h2>
+          <p>{post.entry.data.summary}</p>
+        </li>
+      ))}
+    </ul>
+    {posts.some((p) => p.isFallback) && <p class="muted ui note">{lang === 'sv' ? 'Inläggen finns än så länge bara på engelska.' : 'Some posts are only available in Swedish so far.'}</p>}
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) 2rem;
+  }
+  .posts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 2px solid var(--indigo);
+  }
+  .posts li {
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .posts h2 {
+    font-size: var(--t-h3);
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+  .posts p {
+    margin: 0;
+    color: var(--indigo-soft);
+  }
+  .note {
+    margin-top: 1.5rem;
+  }
+</style>

@@ -1,0 +1,57 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import type { Post } from '../lib/content';
+import { type Lang, routes, otherLang, postUrl, ui } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  post: Post;
+}
+const { lang, post } = Astro.props;
+const t = ui[lang];
+const { Content } = await render(post.entry);
+const back = lang === 'sv' ? 'Alla inlägg' : 'All posts';
+---
+
+<Base
+  lang={lang}
+  title={post.entry.data.title}
+  description={post.entry.data.summary}
+  alternate={postUrl(otherLang(lang), post.slug)}
+  current="blog"
+  canonicalPath={post.isFallback ? postUrl(post.lang, post.slug) : undefined}
+>
+  <article class="wrap post">
+    <p class="ui back"><a href={routes.blog[lang]}>{back}</a></p>
+    {post.isFallback && <p class="ui muted notice">{t.fallbackNotice}</p>}
+    <div lang={post.lang}>
+      <h1>{post.entry.data.title}</h1>
+      <div class="body">
+        <Content />
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .post {
+    padding-block: clamp(2rem, 5vw, 4rem);
+    max-width: calc(var(--measure) + 2 * var(--gutter));
+    margin-inline: auto;
+  }
+  .back {
+    margin-bottom: 2rem;
+  }
+  .notice {
+    border-left: 4px solid var(--cobalt);
+    padding-left: 1rem;
+  }
+  h1 {
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+  }
+  .body {
+    font-size: 1.1875rem;
+    line-height: 1.75;
+  }
+</style>

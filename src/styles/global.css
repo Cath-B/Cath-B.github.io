@@ -1,0 +1,249 @@
+/* Colours come from the business card (indigo cloth, white sashiko thread, cobalt)
+   and from Catherine's red embroidery. */
+:root {
+  --indigo: #18264a;
+  --indigo-soft: #48526f;
+  --cobalt: #1e4db7;
+  --cobalt-deep: #173c91;
+  --thread: #f3f1eb;
+  --paper: #ffffff;
+  --madder: #b8243a;
+  --rule: #d8dbe4;
+  --wash: #f4f5f8;
+
+  --sans: 'Montserrat Variable', 'Montserrat', system-ui, sans-serif;
+  --serif: 'Literata Variable', 'Literata', Georgia, serif;
+
+  /* Type scale: 14 / 16 / 18 / 21 / 24 / 36 / 48 / 60 */
+  --t-small: 0.875rem;
+  --t-ui: 1rem;
+  --t-body: 1.125rem;
+  --t-h4: 1.3125rem;
+  --t-h3: 1.5rem;
+  --t-h2: clamp(1.75rem, 1.2rem + 2vw, 2.25rem);
+  --t-h1: clamp(2.25rem, 1.4rem + 3.2vw, 3.75rem);
+
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --max: 76rem;
+  --measure: 34em;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--indigo);
+  font-family: var(--serif);
+  font-size: var(--t-body);
+  line-height: 1.65;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--sans);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5em;
+  text-wrap: balance;
+}
+h1 {
+  font-size: var(--t-h1);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+h2 {
+  font-size: var(--t-h2);
+  font-weight: 500;
+}
+h3 {
+  font-size: var(--t-h3);
+}
+h4 {
+  font-size: var(--t-h4);
+}
+
+p {
+  margin: 0 0 1em;
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+/* Links are underlined with a running stitch. */
+a {
+  color: var(--cobalt);
+  text-decoration: none;
+  background-image: linear-gradient(to right, currentColor 58%, transparent 58%);
+  background-size: 0.5em 0.09em;
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  padding-bottom: 0.12em;
+}
+a:hover {
+  color: var(--cobalt-deep);
+  background-size: 0.32em 0.09em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.lead {
+  font-size: var(--t-h4);
+  line-height: 1.55;
+  max-width: 30em;
+}
+
+.muted {
+  color: var(--indigo-soft);
+}
+
+.ui {
+  font-family: var(--sans);
+  font-size: var(--t-ui);
+  line-height: 1.5;
+}
+
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 10;
+  background: var(--paper);
+  padding: 0.5rem 1rem;
+  font-family: var(--sans);
+}
+.skip:focus {
+  top: 1rem;
+}
+
+.section {
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+.section + .section {
+  border-top: 1px solid var(--rule);
+}
+
+/* Buttons */
+.button {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: var(--t-ui);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--paper);
+  background: var(--cobalt);
+  border: 0;
+  border-radius: 3px;
+  padding: 0.85rem 1.5rem;
+  cursor: pointer;
+  background-image: none;
+}
+.button:hover {
+  color: var(--paper);
+  background: var(--cobalt-deep);
+}
+.button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* Forms */
+.form {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 40rem;
+  font-family: var(--sans);
+  font-size: var(--t-ui);
+}
+.form .row {
+  display: grid;
+  gap: 1.25rem;
+}
+@media (min-width: 40rem) {
+  .form .row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+.field label {
+  font-weight: 600;
+}
+.field .hint {
+  font-weight: 400;
+  color: var(--indigo-soft);
+  font-size: var(--t-small);
+}
+.field input,
+.field select,
+.field textarea {
+  font: inherit;
+  color: var(--indigo);
+  background: var(--paper);
+  border: 1.5px solid #b9bfcf;
+  border-radius: 3px;
+  padding: 0.7rem 0.8rem;
+  width: 100%;
+}
+.field textarea {
+  min-height: 8rem;
+  resize: vertical;
+  font-family: var(--serif);
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 0;
+  border-color: var(--cobalt);
+}
+.form-message {
+  font-family: var(--sans);
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--cobalt);
+  background: var(--wash);
+  max-width: 40rem;
+}
+.form-message[data-kind='error'] {
+  border-color: var(--madder);
+}
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

@@ -1,0 +1,81 @@
+---
+// Workshops as a price list: name and description on the left, the facts on the right.
+import type { CollectionEntry } from 'astro:content';
+import { type Lang, nbsp } from '../i18n';
+
+interface Props {
+  workshops: CollectionEntry<'workshops'>[];
+  lang: Lang;
+}
+const { workshops, lang } = Astro.props;
+const labels = {
+  sv: { duration: 'Längd', group: 'Grupp', price: 'Pris' },
+  en: { duration: 'Length', group: 'Group', price: 'Price' },
+}[lang];
+---
+
+<ul class="list">
+  {workshops.map((w) => {
+    const d = w.data[lang];
+    return (
+      <li>
+        <div>
+          <h3>{d.title}</h3>
+          <p>{d.summary}</p>
+        </div>
+        <dl class="ui">
+          <div><dt>{labels.duration}</dt><dd>{nbsp(d.duration)}</dd></div>
+          <div><dt>{labels.group}</dt><dd>{nbsp(d.group)}</dd></div>
+          <div class="price"><dt>{labels.price}</dt><dd>{nbsp(d.price)}</dd></div>
+        </dl>
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 2px solid var(--indigo);
+  }
+  li {
+    display: grid;
+    gap: 0.75rem 3rem;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  @media (min-width: 52rem) {
+    li {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+    }
+  }
+  h3 {
+    font-size: var(--t-h4);
+    margin-bottom: 0.35rem;
+  }
+  li p {
+    margin: 0;
+  }
+  dl {
+    margin: 0;
+    display: grid;
+    gap: 0.2rem;
+    align-content: start;
+  }
+  dl div {
+    display: grid;
+    grid-template-columns: 5rem 1fr;
+    gap: 1rem;
+  }
+  dt {
+    color: var(--indigo-soft);
+  }
+  dd {
+    margin: 0;
+  }
+  .price dd {
+    font-weight: 700;
+  }
+</style>

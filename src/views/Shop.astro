@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import PieceCard from '../components/PieceCard.astro';
+import { getShopPieces } from '../lib/content';
+import { type Lang, routes, otherLang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const copy = {
+  sv: {
+    title: 'Butik',
+    description:
+      'Unika plagg som Catherine Brockman har lagat och broderat för hand, var och ett med motiv som berättar en historia.',
+    lead: 'Varje plagg har haft ett tidigare liv och är lagat och smyckat för hand av mig. Motiven är valda för vad de betyder, så varje plagg bär sin egen berättelse. Det finns bara ett av varje.',
+    how: 'Reservera ett plagg med formuläret på dess sida. Jag bekräftar inom två arbetsdagar och skickar betalningsuppgifter för Swish.',
+    empty: 'Inga plagg just nu. Följ @theinklinglab på Instagram för att se nästa.',
+  },
+  en: {
+    title: 'Shop',
+    description:
+      'One-of-a-kind garments repaired and embroidered by hand by Catherine Brockman, each with motifs that tell a story.',
+    lead: "Each piece is a pre-loved garment I've repaired and embellished by hand. The motifs are chosen for what they mean, so every piece carries its own story. There's only one of each.",
+    how: "Reserve a piece with the form on its page. I'll confirm within two working days and send payment details for Swish.",
+    empty: 'No pieces right now. Follow @theinklinglab on Instagram to see the next ones.',
+  },
+}[lang];
+const pieces = await getShopPieces();
+---
+
+<Base lang={lang} title={copy.title} description={copy.description} alternate={routes.shop[otherLang(lang)]} current="shop">
+  <section class="wrap intro">
+    <h1>{copy.title}</h1>
+    <p class="lead">{copy.lead}</p>
+    <p class="muted">{copy.how}</p>
+  </section>
+  <section class="wrap">
+    {pieces.length ? (
+      <div class="pieces">
+        {pieces.map((piece) => <PieceCard piece={piece} lang={lang} />)}
+      </div>
+    ) : (
+      <p>{copy.empty}</p>
+    )}
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(2rem, 4vw, 3rem);
+  }
+  .pieces {
+    display: grid;
+    gap: 3rem 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  }
+</style>
