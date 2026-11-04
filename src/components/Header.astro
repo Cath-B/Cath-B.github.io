@@ -126,8 +126,72 @@ const other = otherLang(lang);
   nav a[aria-current='page'] {
     color: var(--cobalt);
   }
+  /* Phone: each item is a stitched patch, so it reads as something to tap.
+     The running stitch is the site's mark for a link; the current page is
+     indigo with white thread, like the band above. */
+  @media (max-width: 39.9375rem) {
+    nav {
+      flex-basis: 100%;
+    }
+    nav ul {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      max-width: 24rem;
+    }
+    nav a {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.75rem;
+      padding: 0.5rem 0.75rem;
+      background-color: var(--wash);
+      border-radius: 3px;
+    }
+    nav a::after {
+      --stitch: 0.5em;
+      --thread-w: 1.5px;
+      content: '';
+      position: absolute;
+      inset: 0.3rem;
+      pointer-events: none;
+      background:
+        linear-gradient(to right, currentColor 58%, transparent 0) top / var(--stitch) var(--thread-w),
+        linear-gradient(to right, currentColor 58%, transparent 0) bottom / var(--stitch) var(--thread-w),
+        linear-gradient(to bottom, currentColor 58%, transparent 0) left / var(--thread-w) var(--stitch),
+        linear-gradient(to bottom, currentColor 58%, transparent 0) right / var(--thread-w) var(--stitch);
+      background-repeat: round no-repeat, round no-repeat, no-repeat round, no-repeat round;
+    }
+    nav a:hover {
+      color: var(--cobalt);
+    }
+    nav a[aria-current='page'] {
+      color: var(--thread);
+      background-color: var(--indigo);
+    }
+    .home nav {
+      display: flex;
+      justify-content: center;
+    }
+    .home nav ul {
+      width: 100%;
+    }
+    .home nav a {
+      font-size: 0.875rem;
+      letter-spacing: 0.1em;
+    }
+  }
+
   /* The card's centred dots between words, drawn so they sit at mid-height at any size. */
   @media (min-width: 40rem) {
+    nav a:hover,
+    nav a[aria-current='page'] {
+      background-image: linear-gradient(to right, currentColor 58%, transparent 58%);
+      background-size: 0.5em 0.09em;
+      background-position: 0.11em calc(100% - 0.2rem);
+      background-repeat: repeat-x;
+    }
     nav ul {
       gap: 0 0.8em;
       align-items: center;
