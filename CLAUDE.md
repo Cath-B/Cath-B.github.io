@@ -23,7 +23,12 @@ npm install
 npm run dev       # dev server at http://localhost:4321
 npm run build     # static build into dist/
 npx astro check   # type check
+npm run verify    # everything CI runs: content notes, type check, build, site check
 ```
+
+`npm run check:content` (`scripts/content-report.mjs`) lists unfinished content, such as shop pieces without photos, photos not listed under `images:`, and blog posts in one language. It only warns and never fails.
+
+`npm run check:site` (`scripts/check-site.mjs`) checks the built `dist/` and fails on problems: broken internal links and `#anchors`, language versions that don't point at each other (switch link, `hreflang`, `canonical`), forms that don't post to Formspree, and reservation forms on pieces that aren't `available`. Run it after `npm run build`.
 
 `npx astro preview` runs as a background daemon in Astro 7 (`astro preview stop` to end it).
 
@@ -31,7 +36,7 @@ On this machine `python3` isn't installed. For headless screenshots, run chromiu
 
 ## Deploy
 
-`.github/workflows/deploy.yml` builds and deploys on every push to `main`. In the repo's Pages settings, the source must be set to **GitHub Actions**. `public/CNAME` keeps the custom domain. `public/workshops.html` and `public/blog.html` redirect the old URLs.
+`.github/workflows/deploy.yml` runs the checks above on every push and pull request, and deploys only pushes to `main`. A failed check stops the deploy, and the live site stays as it was. In the repo's Pages settings, the source must be set to **GitHub Actions**. `public/CNAME` keeps the custom domain. `public/workshops.html` and `public/blog.html` redirect the old URLs.
 
 ## Architecture
 
@@ -39,7 +44,7 @@ On this machine `python3` isn't installed. For headless screenshots, run chromiu
 - **Content collections** are defined in `src/content.config.ts`:
   - `shop/<slug>/index.md` holds the piece's photos beside it. Facts shared by both languages (status, price, size, images) sit at the top level, and texts sit under `sv:` and `en:`. A piece only appears in the shop once it has at least one image. `status` is `available`, `reserved` or `sold`, and the reservation form only renders for `available` pieces.
   - `workshops/*.md` uses frontmatter only, with `audience: teams | friends`.
-  - `blog/<slug>/{sv,en}.md`. A post that exists in one language is shown in that language on both sites, and its fallback page sets `canonical` to the original instead of emitting `hreflang` (see `canonicalPath` in `Base.astro`).
+  - `blog/<slug>/{sv,en}.md`. A post that exists in one language is shown in that language on both sites, and its fallback page sets `canonical` to the original. Neither page emits `hreflang`, since there is no translation (see `canonicalPath` and `hreflang` in `Base.astro`).
 - **Forms**: all three use `src/components/EnquiryForm.astro`, which posts to the single Formspree endpoint in `src/config.ts`. A hidden `form` field tells them apart. It works without JS, and with JS it submits via fetch and shows an inline confirmation. Formspree's free plan has no file uploads, so the forms ask for links instead.
 - **Visual system** (in `src/styles/global.css`): taken from Catherine's business card (`design/business-card.jpg`). Colours are indigo, white thread and cobalt, plus madder red used only for shop status. Type is Montserrat for the name, menu, headings and UI, and Literata for running text. Links have a dashed "running stitch" underline. `SashikoBand.astro` draws the indigo sashiko band as SVG. Its seams sew themselves in once on the home page, and that's the site's only animation; keep it that way. Tracked capitals appear only in the name lockup and the menu, echoing the card.
 - Images go through `astro:assets`. Put site photos in `src/assets/` and shop photos in the piece's folder. Photos waiting to be matched to a piece go in `src/content/shop/_unsorted-photos/`.

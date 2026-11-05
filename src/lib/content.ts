@@ -27,6 +27,8 @@ export type Post = {
   /** The language the post is actually written in. */
   lang: Lang;
   isFallback: boolean;
+  /** Whether the post exists in both languages. */
+  translated: boolean;
 };
 
 /** Every post, in the requested language when it exists, otherwise in the other one. */
@@ -42,7 +44,7 @@ export async function getPosts(lang: Lang): Promise<Post[]> {
     const own = versions[lang];
     const other = versions[lang === 'sv' ? 'en' : 'sv'];
     const entry = own ?? other!;
-    posts.push({ slug, entry, lang: own ? lang : lang === 'sv' ? 'en' : 'sv', isFallback: !own });
+    posts.push({ slug, entry, lang: own ? lang : lang === 'sv' ? 'en' : 'sv', isFallback: !own, translated: Boolean(own && other) });
   }
   return posts.sort((a, b) => a.entry.data.order - b.entry.data.order);
 }
