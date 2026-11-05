@@ -22,8 +22,15 @@ interface Props {
    * blog post). Search engines are pointed at the original instead of seeing two copies.
    */
   canonicalPath?: string;
+  /**
+   * Set to false on a page that has no real translation (a blog post written in one language),
+   * so search engines aren't told the other language's fallback page is a translation of it.
+   */
+  hreflang?: boolean;
+  /** Set to true on the 404 page: it has no address of its own and shouldn't be indexed. */
+  notFound?: boolean;
 }
-const { lang, title, description, alternate, current, home = false, image = '/og.jpg', canonicalPath } = Astro.props;
+const { lang, title, description, alternate, current, home = false, image = '/og.jpg', canonicalPath, hreflang = true, notFound = false } = Astro.props;
 const fullTitle = title
   ? `${title} | Catherine Brockman, Inkling Lab`
   : 'Catherine Brockman | Inkling Lab, Stockholm';
@@ -42,8 +49,8 @@ const ogImage = new URL(image, Astro.site);
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Catherine Brockman" />
-    <link rel="canonical" href={canonical} />
-    {!canonicalPath && (
+    {notFound ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    {hreflang && !canonicalPath && !notFound && (
       <>
         <link rel="alternate" hreflang={lang} href={canonical} />
         <link rel="alternate" hreflang={other} href={alt} />
@@ -56,7 +63,7 @@ const ogImage = new URL(image, Astro.site);
     <meta property="og:site_name" content="Catherine Brockman, Inkling Lab" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    {!notFound && <meta property="og:url" content={canonical} />}
     <meta property="og:image" content={ogImage} />
     <meta property="og:locale" content={lang === 'sv' ? 'sv_SE' : 'en_GB'} />
     <meta name="twitter:card" content="summary_large_image" />

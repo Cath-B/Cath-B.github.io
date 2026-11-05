@@ -21,6 +21,7 @@ const back = lang === 'sv' ? 'Alla inlägg' : 'All posts';
   alternate={postUrl(otherLang(lang), post.slug)}
   current="blog"
   canonicalPath={post.isFallback ? postUrl(post.lang, post.slug) : undefined}
+  hreflang={post.translated}
 >
   <article class="wrap post">
     <p class="ui back"><a href={routes.blog[lang]}>{back}</a></p>
